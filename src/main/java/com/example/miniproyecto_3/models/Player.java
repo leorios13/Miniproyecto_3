@@ -35,4 +35,8 @@ public class Player {
     public ArrayList<ArrayList<Integer>> getplayerTable() {
         return playerTable;
     }
+
+    public void setValue(int i, int j, int value){
+        playerTable.get(i).set(j,value);
+    }
 }
