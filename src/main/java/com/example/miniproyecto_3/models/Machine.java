@@ -75,7 +75,12 @@ public class Machine {
             }
         }
     }
+
     public ArrayList<ArrayList<Integer>> getmachineTable() {
         return machineTable;
+    }
+
+    public void setValue(int i, int j, int value) {
+        machineTable.get(i).set(j, value);
     }
 }
