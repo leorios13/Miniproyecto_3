@@ -15,28 +15,37 @@ public class Player {
         }
     }
 
-    public void boatPosition (boolean vertical, int i, int j, int value){
-        if (vertical){
+    public void boatPosition(boolean vertical, int i, int j, int value) {
+        if (vertical) {
             for (int k = 0; k < value; k++) {
-                playerTable.get(i+k).set(j,value);
+                playerTable.get(i + k).set(j, value);
             }
-        }
-        else {
+        } else {
             for (int k = 0; k < value; k++) {
-                playerTable.get(i).set(j+k,value);
+                playerTable.get(i).set(j + k, value);
             }
         }
     }
 
-    public boolean freePosition (int i, int j) {
+    public boolean freePosition(int i, int j) {
         return playerTable.get(i).get(j) == 0;
-
     }
+
+    public String checkShot(int i, int j) {
+        if (playerTable.get(i).get(j) != 0) {
+            // Barco tocado
+            playerTable.get(i).set(j, -1); // Marcamos como tocado
+            return "Tocado";
+        } else {
+            return "Agua";
+        }
+    }
+
     public ArrayList<ArrayList<Integer>> getplayerTable() {
         return playerTable;
     }
 
-    public void setValue(int i, int j, int value){
-        playerTable.get(i).set(j,value);
+    public void setValue(int i, int j, int value) {
+        playerTable.get(i).set(j, value);
     }
 }
