@@ -1,6 +1,6 @@
 package com.example.miniproyecto_3;
 
-import com.example.miniproyecto_3.view.GameView;
+import com.example.miniproyecto_3.view.WelcomeView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,6 +14,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        GameView.getInstance(); // Obtener la instancia de GameView
+        WelcomeView.getInstance(); // Obtener la instancia de WelcomeView
     }
 }
