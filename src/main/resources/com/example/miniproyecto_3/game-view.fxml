@@ -14,7 +14,7 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="896.0" prefWidth="1222.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miniproyecto_3.controllers.GameController">
    <children>
       <AnchorPane fx:id="playerBoard" layoutX="93.0" layoutY="132.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black;" />
-      <AnchorPane fx:id="enemyBoard" layoutX="680.0" layoutY="132.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black;" />
+      <AnchorPane fx:id="machineBoard" layoutX="680.0" layoutY="132.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black;" />
       <VBox layoutX="43.0" layoutY="132.0" prefHeight="500.0" prefWidth="50.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="1" textAlignment="CENTER">
