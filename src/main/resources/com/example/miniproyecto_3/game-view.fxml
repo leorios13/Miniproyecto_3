@@ -11,11 +11,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="896.0" prefWidth="1222.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miniproyecto_3.controllers.GameController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miniproyecto_3.controllers.GameController">
    <children>
-      <AnchorPane fx:id="playerBoard" layoutX="93.0" layoutY="132.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black;" />
-      <AnchorPane fx:id="machineBoard" layoutX="680.0" layoutY="132.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: black;" />
-      <VBox layoutX="43.0" layoutY="132.0" prefHeight="500.0" prefWidth="50.0">
+      <AnchorPane fx:id="playerBoard" layoutX="120.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: black;" />
+      <AnchorPane fx:id="machineBoard" layoutX="680.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: black;" />
+      <VBox layoutX="80.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="1" textAlignment="CENTER">
                <effect>
@@ -209,7 +209,7 @@
             </Label>
          </children>
       </VBox>
-      <HBox layoutX="93.0" layoutY="82.0" prefHeight="50.0" prefWidth="500.0">
+      <HBox layoutX="120.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="A" textAlignment="CENTER">
                <effect>
@@ -403,7 +403,7 @@
             </Label>
          </children>
       </HBox>
-      <VBox layoutX="630.0" layoutY="132.0" prefHeight="500.0" prefWidth="50.0">
+      <VBox layoutX="640.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="1" textAlignment="CENTER">
                <effect>
@@ -597,7 +597,7 @@
             </Label>
          </children>
       </VBox>
-      <HBox layoutX="680.0" layoutY="82.0" prefHeight="50.0" prefWidth="500.0">
+      <HBox layoutX="680.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="A" textAlignment="CENTER">
                <effect>
@@ -791,6 +791,6 @@
             </Label>
          </children>
       </HBox>
-      <AnchorPane fx:id="shipPort" layoutX="43.0" layoutY="661.0" prefHeight="200.0" prefWidth="1106.0" />
+      <AnchorPane fx:id="shipPort" layoutX="80.0" layoutY="520.0" prefHeight="160.0" prefWidth="1040.0" />
    </children>
 </Pane>
