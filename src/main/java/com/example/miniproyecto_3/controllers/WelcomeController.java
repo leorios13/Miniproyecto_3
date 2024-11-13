@@ -10,12 +10,9 @@ import java.io.IOException;
 
 public class WelcomeController {
 
-    private Player player;
-    private Machine machine;
+
     @FXML
     void onHandlePlayButton(ActionEvent event) throws IOException {
-        player = new Player();
-        machine = new Machine();
         GameView.getInstance().getGameController().initializeBoard();
 
     }
