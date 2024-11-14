@@ -7,12 +7,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -73,9 +75,22 @@ public class GameController {
         for(int i=0; i<cant; i++){
 
             Rectangle ship = new Rectangle();
-            ship.setFill(Color.GRAY);
-            ship.setStroke(Color.BLACK);
-
+            if (cant == 1) {
+                ship.setFill(Color.GRAY);
+                ship.setStroke(Color.BLACK);
+            }
+            if (cant == 2) {
+                ship.setFill(Color.GREEN);
+                ship.setStroke(Color.BLACK);
+            }
+            if (cant == 3) {
+                ship.setFill(Color.YELLOW);
+                ship.setStroke(Color.BLACK);
+            }
+            if (cant == 4) {
+                ship.setFill(Color.ORANGE);
+                ship.setStroke(Color.BLACK);
+            }
             ship.setWidth(lenght * CELL_SIZE);
             ship.setHeight(CELL_SIZE);
 
@@ -101,7 +116,19 @@ public class GameController {
             int col = i % 10;
             Rectangle cell = (Rectangle) board.getChildren().get(i);
 
-            if(modelBoard.get(fila).get(col) != 0) {
+            if(modelBoard.get(fila).get(col) == 1) {
+                cell.setFill(Color.ORANGE);
+                cell.setStroke(Color.BLACK);
+            }
+            if(modelBoard.get(fila).get(col) == 2) {
+                cell.setFill(Color.YELLOW);
+                cell.setStroke(Color.BLACK);
+            }
+            if(modelBoard.get(fila).get(col) == 3) {
+                cell.setFill(Color.GREEN);
+                cell.setStroke(Color.BLACK);
+            }
+            if(modelBoard.get(fila).get(col) == 4) {
                 cell.setFill(Color.GRAY);
                 cell.setStroke(Color.BLACK);
             }
@@ -228,10 +255,14 @@ public class GameController {
                             String shotResult = machine.checkShot(fila, col);
 
                             if(shotResult.equals("Tocado")) {
-                                cell.setFill(Color.RED);
+                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
+                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
+                                cell.setFill(bombaPattern);
                                 cell.setStroke(Color.BLACK);
                             } else {
-                                cell.setFill(Color.DARKBLUE);
+                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
+                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
+                                cell.setFill(bombaPattern);
                                 cell.setStroke(Color.BLACK);
                             }
 
@@ -243,10 +274,14 @@ public class GameController {
                             Rectangle playerCell = (Rectangle) playerBoard.getChildren().get(playerCellIndex);
 
                             if(machineShotResult.equals("Tocado")) {
-                                playerCell.setFill(Color.RED);
+                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
+                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
+                                playerCell.setFill(bombaPattern);
                                 playerCell.setStroke(Color.BLACK);
                             } else {
-                                playerCell.setFill(Color.DARKBLUE);
+                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
+                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
+                                playerCell.setFill(bombaPattern);
                                 playerCell.setStroke(Color.BLACK);
                             }
 

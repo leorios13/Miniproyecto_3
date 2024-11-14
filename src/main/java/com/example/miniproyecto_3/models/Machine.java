@@ -71,7 +71,18 @@ public class Machine {
 
     public String checkShot(int i, int j) {
         if (machineTable.get(i).get(j) != 0) {
-            machineTable.get(i).set(j, -1); // Marcamos como tocado
+            if (machineTable.get(i).get(j) == 1) {
+                machineTable.get(i).set(j, -1);
+            }
+            if (machineTable.get(i).get(j) == 2) {
+                machineTable.get(i).set(j, -2);
+            }
+            if (machineTable.get(i).get(j) == 3) {
+                machineTable.get(i).set(j, -3);
+            }
+            if (machineTable.get(i).get(j) == 4) {
+                machineTable.get(i).set(j, -4);
+            }// Marcamos como tocado
             return "Tocado";
         } else {
             return "Agua";
