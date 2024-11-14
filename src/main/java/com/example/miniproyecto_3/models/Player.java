@@ -34,7 +34,19 @@ public class Player {
     public String checkShot(int i, int j) {
         if (playerTable.get(i).get(j) != 0) {
             // Barco tocado
-            playerTable.get(i).set(j, -1); // Marcamos como tocado
+            if (playerTable.get(i).get(j) == 1) {
+                playerTable.get(i).set(j, -1);
+            }
+            if (playerTable.get(i).get(j) == 2) {
+                playerTable.get(i).set(j, -2);
+            }
+            if (playerTable.get(i).get(j) == 3) {
+                playerTable.get(i).set(j, -3);
+            }
+            if (playerTable.get(i).get(j) == 4) {
+                playerTable.get(i).set(j, -4);
+            }
+            // Marcamos como tocado
             return "Tocado";
         } else {
             return "Agua";
