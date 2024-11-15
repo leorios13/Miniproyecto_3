@@ -49,6 +49,7 @@ public class Player {
             // Marcamos como tocado
             return "Tocado";
         } else {
+            playerTable.get(i).set(j, 5);
             return "Agua";
         }
     }
