@@ -310,6 +310,8 @@ public class GameController {
                                         machineBoard.getChildren().clear();
                                         shipPort.getChildren().clear();
                                         initializeBoard();
+                                        showButton.setDisable(false);
+    
                                     }
                                 }
                             } else {
@@ -350,7 +352,9 @@ public class GameController {
                     playerBoard.getChildren().clear();
                     machineBoard.getChildren().clear();
                     shipPort.getChildren().clear();
-                    initializeBoard(); }
+                    initializeBoard();
+                    showButton.setDisable(false);
+                    return;}
             }
 
             machineTurn();
