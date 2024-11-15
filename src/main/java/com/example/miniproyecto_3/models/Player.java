@@ -53,11 +53,57 @@ public class Player {
         }
     }
 
-    public ArrayList<ArrayList<Integer>> getplayerTable() {
+    public ArrayList<ArrayList<Integer>> getPlayerTable() {
         return playerTable;
     }
 
-    public void setValue(int i, int j, int value) {
-        playerTable.get(i).set(j, value);
+    public int getValue(int i, int j) { return playerTable.get(i).get(j); }
+
+    public boolean checkBoatSunken(int row, int col, int value) {
+
+        int consecutiveTouches = 0;
+        ArrayList<Integer> positionsToUpdate = new ArrayList<>();
+
+        // Recorre la fila
+        for (int i = 0; i < 10; i++) {
+            if (playerTable.get(i).get(col) == -value) {
+                positionsToUpdate.add(i);
+                consecutiveTouches++;
+
+                // Si el número de impactos consecutivos equivale al tamaño del barco
+                if (consecutiveTouches == value) {
+                    for (int pos : positionsToUpdate) {
+                        playerTable.get(pos).set(col, -5);
+                    }
+                    return true;
+                }
+            } else {
+                // Si encuentra un espacio no impactado, reinicia el contador
+                consecutiveTouches = 0;
+            }
+        }
+
+        consecutiveTouches = 0;
+        positionsToUpdate.clear();
+
+        // Recorre la columna
+        for (int j = 0; j < 10; j++) {
+            if (playerTable.get(row).get(j) == -value) {
+                positionsToUpdate.add(j);
+                consecutiveTouches++;
+
+                // Si el número de impactos consecutivos equivale al tamaño del barco
+                if (consecutiveTouches == value) {
+                    for (int pos : positionsToUpdate) {
+                        playerTable.get(row).set(pos, -5);
+                    }
+                    return true;
+                }
+            } else {
+                // Si encuentra un espacio no impactado, reinicia el contador
+                consecutiveTouches = 0;
+            }
+        }
+        return false;
     }
 }
