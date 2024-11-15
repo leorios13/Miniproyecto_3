@@ -293,6 +293,7 @@ public class GameController {
                             int boatSize = machine.getValue(fila, col);
 
                             String shotResult = machine.checkShot(fila, col);
+                            cell.setOnMousePressed(null); //deshabilitar la celda que ya ha seleccionado para que no repita tiro
 
                             if(shotResult.equals("Tocado")) {
 
@@ -305,6 +306,10 @@ public class GameController {
 
                                     if(machineSunkenBoats == 10) {
                                         new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "GANASTE :)", Alert.AlertType.INFORMATION);
+                                        playerBoard.getChildren().clear();
+                                        machineBoard.getChildren().clear();
+                                        shipPort.getChildren().clear();
+                                        initializeBoard();
                                     }
                                 }
                             } else {
@@ -324,7 +329,7 @@ public class GameController {
     public void machineTurn() {
         System.out.println("Turno de la máquina");
         playerTurn = false;
-        int[] posTiro = machine.makeShot();
+        int[] posTiro = machine.makeShot(player.getPlayerTable());
         int fila = posTiro[0];
         int col = posTiro[1];
         int boatSize = player.getValue(fila, col);
@@ -335,7 +340,6 @@ public class GameController {
         if(machineShotResult.equals("Tocado")) {
             playerCell.setFill(bombaPattern);
             playerCell.setStroke(Color.BLACK);
-            System.out.println(boatSize);
 
             if(player.checkBoatSunken(fila, col, boatSize)) {
                 playerSunkenBoats++;
@@ -343,7 +347,10 @@ public class GameController {
 
                 if(playerSunkenBoats == 10) {
                     new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "PERDISTE :/", Alert.AlertType.INFORMATION);
-                }
+                    playerBoard.getChildren().clear();
+                    machineBoard.getChildren().clear();
+                    shipPort.getChildren().clear();
+                    initializeBoard(); }
             }
 
             machineTurn();
@@ -352,7 +359,6 @@ public class GameController {
             playerCell.setStroke(Color.BLACK);
             playerTurn = true;
         }
-        System.out.println(playerSunkenBoats);
     }
     public void onHandleInstructionsButton(ActionEvent actionEvent){
         new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "   ", Alert.AlertType.INFORMATION);
