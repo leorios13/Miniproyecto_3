@@ -85,14 +85,21 @@ public class Machine {
             }// Marcamos como tocado
             return "Tocado";
         } else {
+            machineTable.get(i).set(j, 5);
             return "Agua";
         }
     }
 
-    public int[] makeShot() {
+    public int[] makeShot(ArrayList<ArrayList<Integer>> playerTable) {
         Random random = new Random();
         int i = random.nextInt(10);
         int j = random.nextInt(10);
+
+        while(playerTable.get(i).get(j) < 0 || playerTable.get(i).get(j) == 5) {
+            i = random.nextInt(10);
+            j = random.nextInt(10);
+        }
+
         return new int[]{i, j};
     }
 
