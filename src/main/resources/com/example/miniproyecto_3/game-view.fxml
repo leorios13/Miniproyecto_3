@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.Light.Distant?>
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -11,11 +14,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miniproyecto_3.controllers.GameController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.miniproyecto_3.controllers.GameController">
    <children>
-      <AnchorPane fx:id="playerBoard" layoutX="120.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: black;" />
-      <AnchorPane fx:id="machineBoard" layoutX="680.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: black;" />
-      <VBox layoutX="80.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0">
+      <AnchorPane fx:id="playerBoard" layoutX="120.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: WHITE;" />
+      <AnchorPane fx:id="machineBoard" layoutX="680.0" layoutY="80.0" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color: WHITE;" />
+      <VBox layoutX="80.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0" style="-fx-background-color: white;">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="1" textAlignment="CENTER">
                <effect>
@@ -209,7 +212,7 @@
             </Label>
          </children>
       </VBox>
-      <HBox layoutX="120.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0">
+      <HBox layoutX="120.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0" style="-fx-background-color: white;">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="A" textAlignment="CENTER">
                <effect>
@@ -403,7 +406,7 @@
             </Label>
          </children>
       </HBox>
-      <VBox layoutX="640.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0">
+      <VBox layoutX="640.0" layoutY="80.0" prefHeight="400.0" prefWidth="40.0" style="-fx-background-color: white;">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="1" textAlignment="CENTER">
                <effect>
@@ -597,7 +600,7 @@
             </Label>
          </children>
       </VBox>
-      <HBox layoutX="680.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0">
+      <HBox layoutX="680.0" layoutY="40.0" prefHeight="40.0" prefWidth="400.0" style="-fx-background-color: white;">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: BLACK;" text="A" textAlignment="CENTER">
                <effect>
@@ -791,6 +794,56 @@
             </Label>
          </children>
       </HBox>
-      <AnchorPane fx:id="shipPort" layoutX="80.0" layoutY="520.0" prefHeight="160.0" prefWidth="1040.0" />
+      <AnchorPane fx:id="shipPort" layoutX="80.0" layoutY="520.0" prefHeight="160.0" prefWidth="840.0" />
+      <Button fx:id="instructionsButton" layoutX="-3.0" mnemonicParsing="false" onAction="#onHandleInstructionsButton" prefHeight="29.0" prefWidth="1206.0" style="-fx-background-color: #6c3b2a; -fx-border-color: black;" text="INSTRUCTIONS(?)" textFill="WHITE" textOverrun="CENTER_ELLIPSIS" underline="true">
+         <font>
+            <Font name="Cambria Bold" size="14.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="967.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/bomba.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="967.0" layoutY="573.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/boton-x.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="showButton" layoutX="1104.0" layoutY="46.0" mnemonicParsing="false" onAction="#onHandleShowButton" style="-fx-background-color: ORANGE;" text="SHOW">
+         <font>
+            <Font name="Cambria Bold" size="14.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="967.0" layoutY="625.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/crucero.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="1031.0" layoutY="531.0" text="TOCADO">
+         <font>
+            <Font name="Cambria Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="1031.0" layoutY="584.0" text="AGUA">
+         <font>
+            <Font name="Cambria Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="1031.0" layoutY="636.0" text="HUNDIDO">
+         <font>
+            <Font name="Cambria Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="-82.0" layoutY="260.0" prefHeight="40.0" prefWidth="268.0" rotate="-90.0" text="TABLERO DE POSICIÓN">
+         <font>
+            <Font name="Cambria Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="478.0" layoutY="250.0" prefHeight="40.0" prefWidth="268.0" rotate="-90.0" text="TABLERO PRINCIPAL">
+         <font>
+            <Font name="Cambria Bold" size="24.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

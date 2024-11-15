@@ -2,21 +2,22 @@ package com.example.miniproyecto_3.controllers;
 
 import com.example.miniproyecto_3.models.Machine;
 import com.example.miniproyecto_3.models.Player;
+import com.example.miniproyecto_3.view.alert.AlertBox;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameController {
@@ -30,22 +31,34 @@ public class GameController {
     private AnchorPane machineBoard;
     @FXML
     private AnchorPane shipPort;
+    @FXML
+    private Button showButton;
 
     private Player player;
     private Machine machine;
     private int placedPlayerBoats;
     private boolean playerTurn; // Para alternar turnos
+    private int machineSunkenBoats;
+    private int playerSunkenBoats;
+
+    Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
+    ImagePattern bombaPattern = new ImagePattern(bombaImage);
+    Image xImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
+    ImagePattern xPattern = new ImagePattern(xImage);
+    Image sunkedImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/crucero.png"));
+    ImagePattern sunkedPattern = new ImagePattern(sunkedImage);
 
     public void initializeBoard() {
         player = new Player();
         machine = new Machine();
         placedPlayerBoats = 0;
         playerTurn = false;
+        machineSunkenBoats = 0;
+        playerSunkenBoats = 0;
 
         createBoard(playerBoard);
         createBoard(machineBoard);
         machine.autoFillBoats();
-        updateBoardWithModel(machineBoard, machine.getmachineTable());
         addMouseEventsToMachineBoard();
 
         createShips(1,0,4,1);
@@ -59,7 +72,7 @@ public class GameController {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Rectangle cell = new Rectangle(CELL_SIZE, CELL_SIZE);
-                cell.setFill(Color.LIGHTBLUE);
+                cell.setFill(Color.web("#9EECFF"));
                 cell.setStroke(Color.BLACK);
 
                 cell.setX(col * CELL_SIZE);
@@ -76,19 +89,19 @@ public class GameController {
 
             Rectangle ship = new Rectangle();
             if (cant == 1) {
-                ship.setFill(Color.GRAY);
+                ship.setFill(Color.SALMON);
                 ship.setStroke(Color.BLACK);
             }
             if (cant == 2) {
-                ship.setFill(Color.GREEN);
-                ship.setStroke(Color.BLACK);
-            }
-            if (cant == 3) {
                 ship.setFill(Color.YELLOW);
                 ship.setStroke(Color.BLACK);
             }
+            if (cant == 3) {
+                ship.setFill(Color.CORAL);
+                ship.setStroke(Color.BLACK);
+            }
             if (cant == 4) {
-                ship.setFill(Color.ORANGE);
+                ship.setFill(Color.YELLOWGREEN);
                 ship.setStroke(Color.BLACK);
             }
             ship.setWidth(lenght * CELL_SIZE);
@@ -108,32 +121,58 @@ public class GameController {
 
     }
 
+    public void onHandleShowButton(ActionEvent event) throws IOException {
+
+        updateBoardWithModel(machineBoard, machine.getmachineTable());
+    }
+
     public void updateBoardWithModel(AnchorPane board, ArrayList<ArrayList<Integer>> modelBoard) {
-    // funcion para crear barco en el tablero de la maquina a partir de la matriz interna
+
+        // funcion para crear barco en el tablero de la maquina a partir de la matriz interna
         for(int i = 0; i < board.getChildren().size(); i++) {
 
             int fila = i / 10;
             int col = i % 10;
             Rectangle cell = (Rectangle) board.getChildren().get(i);
+            cell.setStroke(Color.BLACK);
 
-            if(modelBoard.get(fila).get(col) == 1) {
-                cell.setFill(Color.ORANGE);
-                cell.setStroke(Color.BLACK);
+            if(board.getId().equals("playerBoard") || !showButton.isDisabled()) {
+                if(modelBoard.get(fila).get(col) == 1) {
+                    cell.setFill(Color.YELLOWGREEN);
+                }
+                if(modelBoard.get(fila).get(col) == 2) {
+                    cell.setFill(Color.CORAL);
+                }
+                if(modelBoard.get(fila).get(col) == 3) {
+                    cell.setFill(Color.YELLOW);
+                }
+                if(modelBoard.get(fila).get(col) == 4) {
+                    cell.setFill(Color.SALMON);
+                }
             }
-            if(modelBoard.get(fila).get(col) == 2) {
-                cell.setFill(Color.YELLOW);
-                cell.setStroke(Color.BLACK);
-            }
-            if(modelBoard.get(fila).get(col) == 3) {
-                cell.setFill(Color.GREEN);
-                cell.setStroke(Color.BLACK);
-            }
-            if(modelBoard.get(fila).get(col) == 4) {
-                cell.setFill(Color.GRAY);
-                cell.setStroke(Color.BLACK);
+
+            if(modelBoard.get(fila).get(col) < 0) {
+
+                if(modelBoard.get(fila).get(col) == -5) {
+                    cell.setFill(sunkedPattern);
+                } else {
+                    cell.setFill(bombaPattern);
+                }
             }
         }
 
+    }
+
+    public void resetBoardColors(AnchorPane board) {
+        // Recorre todos los nodos del AnchorPane
+        for (int i = 0; i < board.getChildren().size(); i++) {
+            if (board.getChildren().get(i) instanceof Rectangle) {
+                Rectangle cell = (Rectangle) board.getChildren().get(i);
+                // Restablecer el color a un estado inicial (por ejemplo, color azul claro)
+                cell.setFill(Color.web("#9EECFF"));
+                cell.setStroke(Color.BLACK);
+            }
+        }
     }
 
     private void addMouseEventsToShip(Rectangle ship, double initialX, double initialY) {
@@ -199,11 +238,10 @@ public class GameController {
                             cellsPlaced++;
                         }
                     }
-
                     if(cellsPlaced == shipSize) {
                         player.boatPosition(vertical, filaInicial, colInicial, shipSize);
                         ship.setVisible(false);
-                        updateBoardWithModel(playerBoard, player.getplayerTable());
+                        updateBoardWithModel(playerBoard, player.getPlayerTable());
                         placedPlayerBoats++;
 
                         if(placedPlayerBoats == 10) {
@@ -220,7 +258,6 @@ public class GameController {
                     ship.setY(initialY);
                 }
 
-                //System.out.println(player.getplayerTable());
             }
         });
 
@@ -228,7 +265,9 @@ public class GameController {
 
     private void startGame() {
 
-        System.out.println("Has posicionado todos los barcos, el juevo va a empezar. Inicia el jugador");
+        new AlertBox().showAlert("INFORMATION", "¡El juego ha iniciado!", "Prepárate para comenzar la partida disparando a tu oponente...BUENA SUERTE :)", Alert.AlertType.INFORMATION);
+        showButton.setDisable(true);
+        resetBoardColors(machineBoard);
         playerTurn = true;
         playerBoard.toBack();
         machineBoard.toFront();
@@ -251,46 +290,71 @@ public class GameController {
                             int cellIndex = machineBoard.getChildren().indexOf(cell);
                             int fila = cellIndex / 10;
                             int col = cellIndex % 10;
+                            int boatSize = machine.getValue(fila, col);
 
                             String shotResult = machine.checkShot(fila, col);
 
                             if(shotResult.equals("Tocado")) {
-                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
-                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
+
                                 cell.setFill(bombaPattern);
                                 cell.setStroke(Color.BLACK);
+
+                                if(machine.checkBoatSunken(fila, col, boatSize)) {
+                                    machineSunkenBoats++;
+                                    updateBoardWithModel(machineBoard, machine.getmachineTable());
+
+                                    if(machineSunkenBoats == 10) {
+                                        new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "GANASTE :)", Alert.AlertType.INFORMATION);
+                                    }
+                                }
                             } else {
-                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
-                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
-                                cell.setFill(bombaPattern);
+                                cell.setFill(xPattern);
                                 cell.setStroke(Color.BLACK);
+                                machineTurn();
                             }
 
-                            System.out.println("Turno de la máquina");
-                            playerTurn = false;
-                            int[] posTiro = machine.makeShot();
-                            String machineShotResult = player.checkShot(posTiro[0], posTiro[1]);
-                            int playerCellIndex = posTiro[0]*10 + posTiro[1];
-                            Rectangle playerCell = (Rectangle) playerBoard.getChildren().get(playerCellIndex);
-
-                            if(machineShotResult.equals("Tocado")) {
-                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
-                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
-                                playerCell.setFill(bombaPattern);
-                                playerCell.setStroke(Color.BLACK);
-                            } else {
-                                Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
-                                ImagePattern bombaPattern = new ImagePattern(bombaImage);
-                                playerCell.setFill(bombaPattern);
-                                playerCell.setStroke(Color.BLACK);
-                            }
-
-                            playerTurn = true;
                         }
                     }
                 }
             });
         }
 
+    }
+
+    public void machineTurn() {
+        System.out.println("Turno de la máquina");
+        playerTurn = false;
+        int[] posTiro = machine.makeShot();
+        int fila = posTiro[0];
+        int col = posTiro[1];
+        int boatSize = player.getValue(fila, col);
+        String machineShotResult = player.checkShot(fila, col);
+        int playerCellIndex = fila*10 + col;
+        Rectangle playerCell = (Rectangle) playerBoard.getChildren().get(playerCellIndex);
+
+        if(machineShotResult.equals("Tocado")) {
+            playerCell.setFill(bombaPattern);
+            playerCell.setStroke(Color.BLACK);
+            System.out.println(boatSize);
+
+            if(player.checkBoatSunken(fila, col, boatSize)) {
+                playerSunkenBoats++;
+                updateBoardWithModel(playerBoard, player.getPlayerTable());
+
+                if(playerSunkenBoats == 10) {
+                    new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "PERDISTE :/", Alert.AlertType.INFORMATION);
+                }
+            }
+
+            machineTurn();
+        } else {
+            playerCell.setFill(xPattern);
+            playerCell.setStroke(Color.BLACK);
+            playerTurn = true;
+        }
+        System.out.println(playerSunkenBoats);
+    }
+    public void onHandleInstructionsButton(ActionEvent actionEvent){
+        new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "   ", Alert.AlertType.INFORMATION);
     }
 }

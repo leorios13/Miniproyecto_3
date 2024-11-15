@@ -23,8 +23,8 @@ public class WelcomeView extends Stage {
         this.setScene(scene); // Establecer la escena en la ventana
         setResizable(false);
         this.show(); // Mostrar la ventana
-    }
 
+    }
 
     public static WelcomeView getInstance() throws IOException {
         return WelcomeViewHolder.INSTANCE = new WelcomeView();
