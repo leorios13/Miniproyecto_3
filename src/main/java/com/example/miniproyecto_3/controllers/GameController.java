@@ -1,5 +1,6 @@
 package com.example.miniproyecto_3.controllers;
 
+import com.example.miniproyecto_3.models.GameStateHandler;
 import com.example.miniproyecto_3.models.Machine;
 import com.example.miniproyecto_3.models.Player;
 import com.example.miniproyecto_3.view.alert.AlertBox;
@@ -61,14 +62,15 @@ public class GameController {
         machine.autoFillBoats();
         addMouseEventsToMachineBoard();
 
-        createShips(1,0,4,1);
-        createShips(3,2,3,2);
-        createShips(12,2,2,3);
-        createShips(7,0,1,4);
+        createShips(1, 0, 4, 1);
+        createShips(3, 2, 3, 2);
+        createShips(12, 2, 2, 3);
+        createShips(7, 0, 1, 4);
+
+        GameStateHandler.clearSavedGame(); // Limpiar juegos guardados anteriores
     }
 
     public void createBoard(AnchorPane board) {
-
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Rectangle cell = new Rectangle(CELL_SIZE, CELL_SIZE);
@@ -80,13 +82,10 @@ public class GameController {
                 board.getChildren().add(cell);
             }
         }
-
     }
 
-    public void createShips(int startX,int startY, int lenght, int cant){
-
-        for(int i=0; i<cant; i++){
-
+    public void createShips(int startX, int startY, int lenght, int cant) {
+        for (int i = 0; i < cant; i++) {
             Rectangle ship = new Rectangle();
             if (cant == 1) {
                 ship.setFill(Color.SALMON);
@@ -116,59 +115,50 @@ public class GameController {
             addMouseEventsToShip(ship, initialX, initialY);
 
             shipPort.getChildren().add(ship);
-            startX += lenght+1;
+            startX += lenght + 1;
         }
-
     }
 
     public void onHandleShowButton(ActionEvent event) throws IOException {
-
         updateBoardWithModel(machineBoard, machine.getmachineTable());
     }
 
     public void updateBoardWithModel(AnchorPane board, ArrayList<ArrayList<Integer>> modelBoard) {
-
-        // funcion para crear barco en el tablero de la maquina a partir de la matriz interna
-        for(int i = 0; i < board.getChildren().size(); i++) {
-
+        for (int i = 0; i < board.getChildren().size(); i++) {
             int fila = i / 10;
             int col = i % 10;
             Rectangle cell = (Rectangle) board.getChildren().get(i);
             cell.setStroke(Color.BLACK);
 
-            if(board.getId().equals("playerBoard") || !showButton.isDisabled()) {
-                if(modelBoard.get(fila).get(col) == 1) {
+            if (board.getId().equals("playerBoard") || !showButton.isDisabled()) {
+                if (modelBoard.get(fila).get(col) == 1) {
                     cell.setFill(Color.YELLOWGREEN);
                 }
-                if(modelBoard.get(fila).get(col) == 2) {
+                if (modelBoard.get(fila).get(col) == 2) {
                     cell.setFill(Color.CORAL);
                 }
-                if(modelBoard.get(fila).get(col) == 3) {
+                if (modelBoard.get(fila).get(col) == 3) {
                     cell.setFill(Color.YELLOW);
                 }
-                if(modelBoard.get(fila).get(col) == 4) {
+                if (modelBoard.get(fila).get(col) == 4) {
                     cell.setFill(Color.SALMON);
                 }
             }
 
-            if(modelBoard.get(fila).get(col) < 0) {
-
-                if(modelBoard.get(fila).get(col) == -5) {
+            if (modelBoard.get(fila).get(col) < 0) {
+                if (modelBoard.get(fila).get(col) == -5) {
                     cell.setFill(sunkedPattern);
                 } else {
                     cell.setFill(bombaPattern);
                 }
             }
         }
-
     }
 
     public void resetBoardColors(AnchorPane board) {
-        // Recorre todos los nodos del AnchorPane
         for (int i = 0; i < board.getChildren().size(); i++) {
             if (board.getChildren().get(i) instanceof Rectangle) {
                 Rectangle cell = (Rectangle) board.getChildren().get(i);
-                // Restablecer el color a un estado inicial (por ejemplo, color azul claro)
                 cell.setFill(Color.web("#9EECFF"));
                 cell.setStroke(Color.BLACK);
             }
@@ -176,81 +166,60 @@ public class GameController {
     }
 
     private void addMouseEventsToShip(Rectangle ship, double initialX, double initialY) {
-
-        ship.setOnMousePressed(new EventHandler <MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event) //clic secundario que permite cambiar la orientación del barco
-            {
-                if(event.getButton().equals(MouseButton.SECONDARY)) {
-                    if (event.getClickCount() == 1) {
-                        double width = ship.getWidth();
-                        double height = ship.getHeight();
-                        ship.setWidth(height);
-                        ship.setHeight(width);
-                    }
+        ship.setOnMousePressed(event -> {
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                if (event.getClickCount() == 1) {
+                    double width = ship.getWidth();
+                    double height = ship.getHeight();
+                    ship.setWidth(height);
+                    ship.setHeight(width);
                 }
             }
         });
 
-        ship.setOnMouseDragged(new EventHandler <MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-                ship.setX(event.getX());
-                ship.setY(event.getY());
-                event.setDragDetect(false);
-            }
+        ship.setOnMouseDragged(event -> {
+            ship.setX(event.getX());
+            ship.setY(event.getY());
+            event.setDragDetect(false);
         });
 
-        ship.setOnMouseReleased(new EventHandler <MouseEvent>()
-        {
-            @Override
-            public void handle(MouseEvent event)
-            {
-                double x = 40 * (int) Math.floor(ship.getX() / 40);
-                double y = 40 * (int) Math.floor(ship.getY() / 40);
-                ship.setX(x);
-                ship.setY(y);
+        ship.setOnMouseReleased(event -> {
+            double x = 40 * (int) Math.floor(ship.getX() / 40);
+            double y = 40 * (int) Math.floor(ship.getY() / 40);
+            ship.setX(x);
+            ship.setY(y);
 
-                Bounds shipBounds = ship.localToScene(ship.getBoundsInLocal());
-                Bounds playerBoardBounds = playerBoard.localToScene(playerBoard.getBoundsInLocal());
+            Bounds shipBounds = ship.localToScene(ship.getBoundsInLocal());
+            Bounds playerBoardBounds = playerBoard.localToScene(playerBoard.getBoundsInLocal());
 
-                if(playerBoardBounds.contains(shipBounds)) {
+            if (playerBoardBounds.contains(shipBounds)) {
+                int cellsPlaced = 0;
+                int shipSize = Integer.parseInt(ship.getId());
+                boolean vertical = ship.getHeight() / 40 == shipSize;
+                int filaInicial = 0, colInicial = 0;
 
-                    int cellsPlaced = 0;
-                    int shipSize = Integer.parseInt(ship.getId());
-                    boolean vertical = ship.getHeight() / 40 == shipSize;
-                    int filaInicial = 0, colInicial = 0;
+                for (int i = 0; i < playerBoard.getChildren().size(); i++) {
+                    Rectangle cell = (Rectangle) playerBoard.getChildren().get(i);
+                    Bounds cellBounds = cell.localToScene(cell.getBoundsInLocal());
+                    int fila = i / 10;
+                    int col = i % 10;
 
-                    for(int i = 0; i < playerBoard.getChildren().size(); i++) {
-                        Rectangle cell = (Rectangle) playerBoard.getChildren().get(i);
-                        Bounds cellBounds = cell.localToScene(cell.getBoundsInLocal());
-                        int fila = i / 10;
-                        int col = i % 10;
-
-                        if(shipBounds.contains(cellBounds) && player.freePosition(fila, col)) {
-                            if(cellsPlaced == 0) {
-                                filaInicial = fila;
-                                colInicial = col;
-                            }
-                            cellsPlaced++;
+                    if (shipBounds.contains(cellBounds) && player.freePosition(fila, col)) {
+                        if (cellsPlaced == 0) {
+                            filaInicial = fila;
+                            colInicial = col;
                         }
+                        cellsPlaced++;
                     }
-                    if(cellsPlaced == shipSize) {
-                        player.boatPosition(vertical, filaInicial, colInicial, shipSize);
-                        ship.setVisible(false);
-                        updateBoardWithModel(playerBoard, player.getPlayerTable());
-                        placedPlayerBoats++;
+                }
+                if (cellsPlaced == shipSize) {
+                    player.boatPosition(vertical, filaInicial, colInicial, shipSize);
+                    ship.setVisible(false);
+                    updateBoardWithModel(playerBoard, player.getPlayerTable());
+                    placedPlayerBoats++;
 
-                        if(placedPlayerBoats == 10) {
-                            startGame();
-                        }
-
-                    } else {
-                        ship.setX(initialX);
-                        ship.setY(initialY);
+                    if (placedPlayerBoats == 10) {
+                        startGame();
                     }
 
                 } else {
@@ -258,13 +227,14 @@ public class GameController {
                     ship.setY(initialY);
                 }
 
+            } else {
+                ship.setX(initialX);
+                ship.setY(initialY);
             }
         });
-
     }
 
     private void startGame() {
-
         new AlertBox().showAlert("INFORMATION", "¡El juego ha iniciado!", "Prepárate para comenzar la partida disparando a tu oponente...BUENA SUERTE :)", Alert.AlertType.INFORMATION);
         showButton.setDisable(true);
         resetBoardColors(machineBoard);
@@ -274,58 +244,50 @@ public class GameController {
     }
 
     private void addMouseEventsToMachineBoard() {
-
-        for(int i = 0; i < machineBoard.getChildren().size(); i++) {
-
+        for (int i = 0; i < machineBoard.getChildren().size(); i++) {
             Rectangle cell = (Rectangle) machineBoard.getChildren().get(i);
 
-            cell.setOnMousePressed(new EventHandler <MouseEvent>()
-            {
-                @Override
-                public void handle(MouseEvent event)
-                {
-                    if(playerTurn) {
-                        System.out.println("Turno del jugador");
-                        if(event.getButton().equals(MouseButton.PRIMARY)) {
-                            int cellIndex = machineBoard.getChildren().indexOf(cell);
-                            int fila = cellIndex / 10;
-                            int col = cellIndex % 10;
-                            int boatSize = machine.getValue(fila, col);
+            cell.setOnMousePressed(event -> {
+                if (playerTurn) {
+                    System.out.println("Turno del jugador");
+                    if (event.getButton().equals(MouseButton.PRIMARY)) {
+                        int cellIndex = machineBoard.getChildren().indexOf(cell);
+                        int fila = cellIndex / 10;
+                        int col = cellIndex % 10;
+                        int boatSize = machine.getValue(fila, col);
 
-                            String shotResult = machine.checkShot(fila, col);
-                            cell.setOnMousePressed(null); //deshabilitar la celda que ya ha seleccionado para que no repita tiro
+                        String shotResult = machine.checkShot(fila, col);
+                        cell.setOnMousePressed(null);
 
-                            if(shotResult.equals("Tocado")) {
+                        if (shotResult.equals("Tocado")) {
+                            cell.setFill(bombaPattern);
+                            cell.setStroke(Color.BLACK);
 
-                                cell.setFill(bombaPattern);
-                                cell.setStroke(Color.BLACK);
+                            if (machine.checkBoatSunken(fila, col, boatSize)) {
+                                machineSunkenBoats++;
+                                updateBoardWithModel(machineBoard, machine.getmachineTable());
 
-                                if(machine.checkBoatSunken(fila, col, boatSize)) {
-                                    machineSunkenBoats++;
-                                    updateBoardWithModel(machineBoard, machine.getmachineTable());
-
-                                    if(machineSunkenBoats == 10) {
-                                        new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "GANASTE :)", Alert.AlertType.INFORMATION);
-                                        playerBoard.getChildren().clear();
-                                        machineBoard.getChildren().clear();
-                                        shipPort.getChildren().clear();
-                                        initializeBoard();
-                                        showButton.setDisable(false);
-    
-                                    }
+                                if (machineSunkenBoats == 10) {
+                                    new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "GANASTE :)", Alert.AlertType.INFORMATION);
+                                    playerBoard.getChildren().clear();
+                                    machineBoard.getChildren().clear();
+                                    shipPort.getChildren().clear();
+                                    initializeBoard();
+                                    showButton.setDisable(false);
+                                    GameStateHandler.clearSavedGame(); // Limpiar el juego guardado al terminar
                                 }
-                            } else {
-                                cell.setFill(xPattern);
-                                cell.setStroke(Color.BLACK);
-                                machineTurn();
                             }
-
+                            saveGame(); // Guardar después de un disparo exitoso
+                        } else {
+                            cell.setFill(xPattern);
+                            cell.setStroke(Color.BLACK);
+                            saveGame(); // Guardar después de un disparo al agua
+                            machineTurn();
                         }
                     }
                 }
             });
         }
-
     }
 
     public void machineTurn() {
@@ -336,35 +298,208 @@ public class GameController {
         int col = posTiro[1];
         int boatSize = player.getValue(fila, col);
         String machineShotResult = player.checkShot(fila, col);
-        int playerCellIndex = fila*10 + col;
+        int playerCellIndex = fila * 10 + col;
         Rectangle playerCell = (Rectangle) playerBoard.getChildren().get(playerCellIndex);
 
-        if(machineShotResult.equals("Tocado")) {
+        if (machineShotResult.equals("Tocado")) {
             playerCell.setFill(bombaPattern);
             playerCell.setStroke(Color.BLACK);
 
-            if(player.checkBoatSunken(fila, col, boatSize)) {
+            if (player.checkBoatSunken(fila, col, boatSize)) {
                 playerSunkenBoats++;
                 updateBoardWithModel(playerBoard, player.getPlayerTable());
 
-                if(playerSunkenBoats == 10) {
+                if (playerSunkenBoats == 10) {
                     new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!", "PERDISTE :/", Alert.AlertType.INFORMATION);
                     playerBoard.getChildren().clear();
                     machineBoard.getChildren().clear();
                     shipPort.getChildren().clear();
                     initializeBoard();
                     showButton.setDisable(false);
-                    return;}
+                    GameStateHandler.clearSavedGame(); // Limpiar el juego guardado al terminar
+                    return;
+                }
             }
-
+            saveGame(); // Guardar después de un disparo exitoso de la máquina
             machineTurn();
         } else {
             playerCell.setFill(xPattern);
             playerCell.setStroke(Color.BLACK);
             playerTurn = true;
+            saveGame(); // Guardar después de un disparo al agua de la máquina
         }
     }
-    public void onHandleInstructionsButton(ActionEvent actionEvent){
+
+    public void onHandleInstructionsButton(ActionEvent actionEvent) {
         new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "   ", Alert.AlertType.INFORMATION);
     }
+
+    public void saveGame() {
+        try {
+            GameStateHandler.GameState state = new GameStateHandler.GameState(
+                    player.getPlayerTable(),
+                    machine.getmachineTable(),
+                    machineSunkenBoats,
+                    playerSunkenBoats,
+                    playerTurn,
+                    true
+            );
+            GameStateHandler.saveGameState(state);
+            System.out.println("Juego guardado exitosamente");
+        } catch (Exception e) {
+            System.err.println("Error al guardar el juego: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    public void loadGame() {
+        GameStateHandler.GameState savedState = GameStateHandler.loadGameState();
+        if (savedState != null) {
+            try {
+                // Limpiar los tableros existentes
+                playerBoard.getChildren().clear();
+                machineBoard.getChildren().clear();
+                shipPort.getChildren().clear();
+
+                // Recrear los tableros visuales
+                createBoard(playerBoard);
+                createBoard(machineBoard);
+
+                // Restaurar el estado del juego
+                this.player = new Player();
+                this.machine = new Machine();
+                this.placedPlayerBoats = 10; // Todos los barcos ya están colocados
+
+                // Restaurar las tablas de juego
+                for (int i = 0; i < BOARD_SIZE; i++) {
+                    for (int j = 0; j < BOARD_SIZE; j++) {
+                        player.getPlayerTable().get(i).set(j, savedState.getPlayerTable().get(i).get(j));
+                        machine.getmachineTable().get(i).set(j, savedState.getMachineTable().get(i).get(j));
+                    }
+                }
+
+                // Restaurar variables de estado
+                this.machineSunkenBoats = savedState.getMachineSunkenBoats();
+                this.playerSunkenBoats = savedState.getPlayerSunkenBoats();
+                this.playerTurn = savedState.isPlayerTurn();
+
+                // Configurar la interfaz para juego en progreso
+                shipPort.setVisible(false);
+                showButton.setDisable(true);
+
+                // Actualizar la visualización de los tableros incluyendo los disparos al agua
+                for (int i = 0; i < machineBoard.getChildren().size(); i++) {
+                    Rectangle machineCell = (Rectangle) machineBoard.getChildren().get(i);
+                    Rectangle playerCell = (Rectangle) playerBoard.getChildren().get(i);
+                    int row = i / BOARD_SIZE;
+                    int col = i % BOARD_SIZE;
+
+                    // Actualizar celda del tablero de la máquina
+                    int machineCellValue = machine.getValue(row, col);
+                    if (machineCellValue == 5) {
+                        machineCell.setFill(xPattern);
+                        machineCell.setStroke(Color.BLACK);
+                    } else if (machineCellValue < 0) {
+                        if (machineCellValue == -5) {
+                            machineCell.setFill(sunkedPattern);
+                        } else {
+                            machineCell.setFill(bombaPattern);
+                        }
+                        machineCell.setStroke(Color.BLACK);
+                    }
+
+                    // Actualizar celda del tablero del jugador
+                    int playerCellValue = player.getValue(row, col);
+                    if (playerCellValue == 5) {
+                        playerCell.setFill(xPattern);
+                        playerCell.setStroke(Color.BLACK);
+                    } else if (playerCellValue < 0) {
+                        if (playerCellValue == -5) {
+                            playerCell.setFill(sunkedPattern);
+                        } else {
+                            playerCell.setFill(bombaPattern);
+                        }
+                        playerCell.setStroke(Color.BLACK);
+                    } else if (playerCellValue > 0 && playerCellValue != 5) {
+                        // Mostrar los barcos del jugador
+                        switch (playerCellValue) {
+                            case 1: playerCell.setFill(Color.YELLOWGREEN); break;
+                            case 2: playerCell.setFill(Color.CORAL); break;
+                            case 3: playerCell.setFill(Color.YELLOW); break;
+                            case 4: playerCell.setFill(Color.SALMON); break;
+                        }
+                        playerCell.setStroke(Color.BLACK);
+                    }
+
+                    // Agregar eventos solo a celdas no disparadas en el tablero de la máquina
+                    if (machineCellValue >= 0 && machineCellValue != 5) {
+                        final int finalRow = row;
+                        final int finalCol = col;
+
+                        machineCell.setOnMousePressed(event -> {
+                            if (playerTurn && event.getButton().equals(MouseButton.PRIMARY)) {
+                                int boatSize = machine.getValue(finalRow, finalCol);
+                                String shotResult = machine.checkShot(finalRow, finalCol);
+                                machineCell.setOnMousePressed(null);
+
+                                if (shotResult.equals("Tocado")) {
+                                    machineCell.setFill(bombaPattern);
+                                    machineCell.setStroke(Color.BLACK);
+
+                                    if (machine.checkBoatSunken(finalRow, finalCol, boatSize)) {
+                                        machineSunkenBoats++;
+                                        updateBoardWithModel(machineBoard, machine.getmachineTable());
+
+                                        if (machineSunkenBoats == 10) {
+                                            new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!",
+                                                    "GANASTE :)", Alert.AlertType.INFORMATION);
+                                            playerBoard.getChildren().clear();
+                                            machineBoard.getChildren().clear();
+                                            shipPort.getChildren().clear();
+                                            initializeBoard();
+                                            showButton.setDisable(false);
+                                            GameStateHandler.clearSavedGame();
+                                            return;
+                                        }
+                                    }
+                                    saveGame();
+                                } else {
+                                    machineCell.setFill(xPattern);
+                                    machineCell.setStroke(Color.BLACK);
+                                    saveGame();
+                                    machineTurn();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                // Colocar los tableros en la posición correcta
+                playerBoard.toBack();
+                machineBoard.toFront();
+
+                // Mostrar alerta de que el juego se ha cargado
+                new AlertBox().showAlert("INFORMATION", "Partida Cargada",
+                        "La partida se ha cargado exitosamente. " +
+                                (playerTurn ? "Es tu turno para disparar." : "Espera tu turno..."),
+                        Alert.AlertType.INFORMATION);
+
+                // Si no es el turno del jugador, hacer que la máquina juegue
+                if (!playerTurn) {
+                    machineTurn();
+                }
+
+                System.out.println("Juego cargado exitosamente");
+            } catch (Exception e) {
+                System.err.println("Error durante la carga del juego: " + e.getMessage());
+                e.printStackTrace();
+                initializeBoard();
+            }
+        } else {
+            System.err.println("No se pudo cargar el juego guardado");
+            initializeBoard();
+        }
+    }
+
 }
