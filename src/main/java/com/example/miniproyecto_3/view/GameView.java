@@ -9,38 +9,81 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
+/**
+ * GameView class representing the game window for the application.
+ * It extends Stage to manage the main game window and sets up the view using an FXML file.
+ * @author Celeste Berrio - Leonardo Rios - Juan Montealegre
+ */
 public class GameView extends Stage {
 
-    private GameController gameController; // Controlador del juego
+    private GameController gameController; // Game controller
 
+    /**
+     * Constructor for GameView.
+     * Loads the FXML file, sets the scene, title, and window icon.
+     *
+     * @throws IOException If there is an error loading the FXML file
+     */
     public GameView() throws IOException {
+        // Load the FXML file using FXMLLoader
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/com/example/miniproyecto_3/game-view.fxml")
         );
-        Parent root = loader.load(); // Cargar la raíz desde el archivo FXML
-        this.gameController = loader.getController(); // Obtener el controlador asociado
-        this.setTitle("Batalla Naval"); // Establecer el título de la ventana
-        Scene scene = new Scene(root); // Crear la escena con la raíz cargada
+        Parent root = loader.load(); // Load the root element from the FXML file
+
+        // Get the associated controller from the FXMLLoader
+        this.gameController = loader.getController();
+
+        // Set the window title
+        this.setTitle("Batalla Naval");
+
+        // Create the scene with the loaded root element
+        Scene scene = new Scene(root);
+
+        // Set the window icon
         this.getIcons().add(new Image(
                 getClass().getResourceAsStream("/com/example/miniproyecto_3/images/crucero.png")
-        )); // Establecer el icono de la ventana
-        this.setScene(scene); // Establecer la escena en la ventana
-        this.show(); // Mostrar la ventana
+        ));
+
+        // Set the scene for this stage
+        this.setScene(scene);
+
+        // Display the window
+        this.show();
     }
 
+    /**
+     * Returns the game controller associated with this view.
+     *
+     * @return GameController instance used in this view
+     */
     public GameController getGameController() {
-        return this.gameController; // Devolver el controlador
+        return this.gameController;
     }
 
+    /**
+     * Returns the singleton instance of GameView.
+     * If no instance exists, it creates a new one.
+     *
+     * @return GameView instance
+     * @throws IOException If there is an error creating the instance
+     */
     public static GameView getInstance() throws IOException {
         if (GameViewHolder.INSTANCE == null) {
-            return GameViewHolder.INSTANCE = new GameView(); // Crear nueva instancia si no existe
+            // Create a new instance if it does not exist
+            return GameViewHolder.INSTANCE = new GameView();
         } else {
-            return GameViewHolder.INSTANCE; // Devolver la instancia existente
+            // Return the existing instance
+            return GameViewHolder.INSTANCE;
         }
     }
 
+    /**
+     * Static inner class to hold the singleton instance of GameView.
+     * This ensures lazy initialization and thread safety.
+     */
     private static class GameViewHolder {
-        private static GameView INSTANCE; // Instancia única de GameView
+        private static GameView INSTANCE; // Singleton instance of GameView
     }
 }

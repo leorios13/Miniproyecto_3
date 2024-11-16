@@ -2,7 +2,11 @@ package com.example.miniproyecto_3.models;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+/**
+ * Represents a Machine that manages a game board for placing and shooting boats.
+ * This class handles automatic boat placement, checking for hits or misses,
+ * and determining whether boats are sunk.
+ */
 public class Machine {
     private ArrayList<ArrayList<Integer>> machineTable;
 
@@ -15,7 +19,10 @@ public class Machine {
             }
         }
     }
-
+    /**
+     * Automatically places boats on the board with predefined sizes and counts.
+     * The method ensures boats do not overlap or exceed the board boundaries.
+     */
     public void autoFillBoats() {
         Random random = new Random();
 
@@ -24,7 +31,12 @@ public class Machine {
         placeBoat(2, 3, random);
         placeBoat(1, 4, random);
     }
-
+    /**
+     * Places boats on the board based on size and count.
+     * @param size   the size of the boat.
+     * @param count  the number of boats of the specified size.
+     * @param random a Random instance for generating random positions and orientations.
+     */
     private void placeBoat(int size, int count, Random random) {
         for (int n = 0; n < count; n++) {
             boolean placed = false;
@@ -41,7 +53,14 @@ public class Machine {
             }
         }
     }
-
+    /**
+     * Checks if a boat can be placed at the specified position and orientation.
+     * @param i         starting row index.
+     * @param j         starting column index.
+     * @param size      size of the boat.
+     * @param vertical  true if the boat is placed vertically, false otherwise.
+     * @return true if the boat can be placed, false otherwise.
+     */
     private boolean canPlaceBoat(int i, int j, int size, boolean vertical) {
         if (vertical) {
             if (i + size > 10) return false;
@@ -56,7 +75,13 @@ public class Machine {
         }
         return true;
     }
-
+    /**
+     * Places a boat on the board at the specified position and orientation.
+     * @param vertical true if the boat is placed vertically, false otherwise.
+     * @param i        starting row index.
+     * @param j        starting column index.
+     * @param value    size of the boat, used as its identifier.
+     */
     private void boatPosition(boolean vertical, int i, int j, int value) {
         if (vertical) {
             for (int k = 0; k < value; k++) {
@@ -68,7 +93,12 @@ public class Machine {
             }
         }
     }
-
+    /**
+     * Checks if a shot hits a boat or misses.
+     * @param i row index of the shot.
+     * @param j column index of the shot.
+     * @return "Tocado" if a boat is hit, "Agua" if it misses.
+     */
     public String checkShot(int i, int j) {
         if (machineTable.get(i).get(j) != 0) {
             if (machineTable.get(i).get(j) == 1) {
@@ -89,7 +119,11 @@ public class Machine {
             return "Agua";
         }
     }
-
+    /**
+     * Randomly generates a shot that has not yet been made.
+     * @param playerTable the player's board, to ensure valid targeting.
+     * @return an array with the row and column indices of the shot.
+     */
     public int[] makeShot(ArrayList<ArrayList<Integer>> playerTable) {
         Random random = new Random();
         int i = random.nextInt(10);
@@ -102,14 +136,28 @@ public class Machine {
 
         return new int[]{i, j};
     }
-
+    /**
+     * Gets the current game board.
+     * @return the game board.
+     */
     public ArrayList<ArrayList<Integer>> getmachineTable() {
         return machineTable;
     }
 
-
+    /**
+     * Gets the value at a specific position on the board.
+     * @param i row index.
+     * @param j column index.
+     * @return the value at the specified position.
+     */
     public int getValue(int i, int j) { return machineTable.get(i).get(j); }
-
+    /**
+     * Checks if a boat is completely sunk after a shot.
+     * @param row   row index of the shot.
+     * @param col   column index of the shot.
+     * @param value size of the boat.
+     * @return true if the boat is sunk, false otherwise.
+     */
     public boolean checkBoatSunken(int row, int col, int value) {
 
         int consecutiveTouches = 0;

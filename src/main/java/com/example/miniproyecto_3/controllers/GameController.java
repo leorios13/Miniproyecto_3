@@ -21,6 +21,12 @@ import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * GameController is the main class for managing the game flow and interaction with the UI.
+ * It controls the player's board, machine's board, and ship placement,
+ * as well as handling the turn-based gameplay.
+ * @author Celeste Berrio - Leonardo Rios - Juan Montealegre
+ */
 public class GameController {
 
     private final int BOARD_SIZE = 10;
@@ -38,10 +44,11 @@ public class GameController {
     private Player player;
     private Machine machine;
     private int placedPlayerBoats;
-    private boolean playerTurn; // Para alternar turnos
+    private boolean playerTurn; // To alternate turns
     private int machineSunkenBoats;
     private int playerSunkenBoats;
 
+    // Image patterns for various board states
     Image bombaImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/bomba.png"));
     ImagePattern bombaPattern = new ImagePattern(bombaImage);
     Image xImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/boton-x.png"));
@@ -49,6 +56,11 @@ public class GameController {
     Image sunkedImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/crucero.png"));
     ImagePattern sunkedPattern = new ImagePattern(sunkedImage);
 
+    /**
+     * Initializes the game board with the player's nickname.
+     *
+     * @param nickName The player's nickname.
+     */
     public void initializeBoard(String nickName) {
         player = new Player(nickName);
         machine = new Machine();
@@ -62,14 +74,20 @@ public class GameController {
         machine.autoFillBoats();
         addMouseEventsToMachineBoard();
 
-        createShips(1, 0, 4, 1);
-        createShips(3, 2, 3, 2);
-        createShips(12, 2, 2, 3);
-        createShips(7, 0, 1, 4);
+        // Create ships with different sizes
+        createShips(1, 0, 4, 1); // 1 ship of length 4
+        createShips(3, 2, 3, 2); // 2 ships of length 3
+        createShips(12, 2, 2, 3); // 3 ships of length 2
+        createShips(7, 0, 1, 4); // 4 ships of length 1
 
-        GameStateHandler.clearSavedGame(); // Limpiar juegos guardados anteriores
+        GameStateHandler.clearSavedGame(); // Clear previous saved games
     }
 
+    /**
+     * Creates the visual board by adding rectangles to represent cells.
+     *
+     * @param board The board (player or machine) to be created.
+     */
     public void createBoard(AnchorPane board) {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -83,10 +101,18 @@ public class GameController {
             }
         }
     }
-
+    /**
+     * Creates ships of specific lengths and quantities for the player.
+     *
+     * @param startX Starting X position.
+     * @param startY Starting Y position.
+     * @param lenght Length of the ship.
+     * @param cant Number of ships to create.
+     */
     public void createShips(int startX, int startY, int lenght, int cant) {
         for (int i = 0; i < cant; i++) {
             Rectangle ship = new Rectangle();
+            // Assign colors based on ship size
             if (cant == 1) {
                 ship.setFill(Color.SALMON);
                 ship.setStroke(Color.BLACK);
@@ -119,10 +145,21 @@ public class GameController {
         }
     }
 
+    /**
+     * Displays the machine's board to the player when the show button is clicked.
+     *
+     * @param event The button click event.
+     */
     public void onHandleShowButton(ActionEvent event) throws IOException {
         updateBoardWithModel(machineBoard, machine.getmachineTable());
     }
 
+    /**
+     * Updates the board visually based on the current model state.
+     *
+     * @param board The board to update (player or machine).
+     * @param modelBoard The model of the board to be reflected visually.
+     */
     public void updateBoardWithModel(AnchorPane board, ArrayList<ArrayList<Integer>> modelBoard) {
         for (int i = 0; i < board.getChildren().size(); i++) {
             int fila = i / 10;
@@ -154,7 +191,11 @@ public class GameController {
             }
         }
     }
-
+    /**
+     * Resets the color of all cells on the board to the default color.
+     *
+     * @param board The board to reset.
+     */
     public void resetBoardColors(AnchorPane board) {
         for (int i = 0; i < board.getChildren().size(); i++) {
             if (board.getChildren().get(i) instanceof Rectangle) {
@@ -165,6 +206,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Adds mouse events for rotating and dragging the ships on the player's board.
+     *
+     * @param ship The ship rectangle to add events to.
+     * @param initialX The initial X position of the ship.
+     * @param initialY The initial Y position of the ship.
+     */
     private void addMouseEventsToShip(Rectangle ship, double initialX, double initialY) {
         ship.setOnMousePressed(event -> {
             if (event.getButton().equals(MouseButton.SECONDARY)) {
@@ -233,7 +281,9 @@ public class GameController {
             }
         });
     }
-
+    /**
+     * Starts the game after all ships have been placed.
+     */
     private void startGame() {
         new AlertBox().showAlert("INFORMATION", "¡El juego ha iniciado!", "Prepárate para comenzar la partida disparando a tu oponente...BUENA SUERTE :)", Alert.AlertType.INFORMATION);
         showButton.setDisable(true);
@@ -242,7 +292,11 @@ public class GameController {
         playerBoard.toBack();
         machineBoard.toFront();
     }
-
+    /**
+     * Adds mouse click events to each cell of the machine's board, allowing the player to attack.
+     * The method handles the player's turn by checking the shot result and updating the board accordingly.
+     * It also handles end-of-game scenarios when all of the machine's boats are sunk.
+     */
     private void addMouseEventsToMachineBoard() {
         for (int i = 0; i < machineBoard.getChildren().size(); i++) {
             Rectangle cell = (Rectangle) machineBoard.getChildren().get(i);
@@ -290,6 +344,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Executes the machine's turn in the game. The machine makes a shot at the player's board,
+     * evaluates the result (hit or miss), and updates the game state accordingly.
+     * If the machine sinks all the player's boats, the game ends with the player losing.
+     */
     public void machineTurn() {
         System.out.println("Turno de la máquina");
         playerTurn = false;
@@ -316,24 +375,30 @@ public class GameController {
                     shipPort.getChildren().clear();
                     initializeBoard(player.getPlayerNickName());
                     showButton.setDisable(false);
-                    GameStateHandler.clearSavedGame(); // Limpiar el juego guardado al terminar
+                    GameStateHandler.clearSavedGame(); // Clear the saved game state after losing
                     return;
                 }
             }
-            saveGame(); // Guardar después de un disparo exitoso de la máquina
+            saveGame(); // Save the game state after a successful hit by the machine
+            // Machine gets another turn after a successful hit
             machineTurn();
         } else {
             playerCell.setFill(xPattern);
             playerCell.setStroke(Color.BLACK);
             playerTurn = true;
-            saveGame(); // Guardar después de un disparo al agua de la máquina
+            saveGame(); // Save the game state after a miss by the machine
         }
     }
 
     public void onHandleInstructionsButton(ActionEvent actionEvent) {
-        new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "   ", Alert.AlertType.INFORMATION);
+        new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "- Colocación de barcos:\n\n * 1 portaaviones: ocupa 4 casillas.\n" +
+                "* 2 submarinos: ocupan 3 casillas cada uno.\n"  +
+                "* 3 destructores: ocupan 2 casillas cada uno.\n" +
+                "* 4 fragatas: ocupan 1 casilla cada uno.\n\n - Ubicalos en tú tablero y empieza a jugar.\n\n - Tienes disparos ilimitados pero cuidado, el que primero derribe los barcos del enemigo ganará.\n\n - Realiza los disparos en el tablero principal (lado derecho) para intentar hundir los barcos del enemigo", Alert.AlertType.INFORMATION);
     }
-
+    /**
+     * Saves the current game state to a file.
+     */
     public void saveGame() {
         try {
             GameStateHandler.GameState state = new GameStateHandler.GameState(
@@ -353,7 +418,9 @@ public class GameController {
         }
     }
 
-
+    /**
+     * Loads a previously saved game state.
+     */
     public void loadGame() {
         GameStateHandler.GameState savedState = GameStateHandler.loadGameState();
         if (savedState != null) {
