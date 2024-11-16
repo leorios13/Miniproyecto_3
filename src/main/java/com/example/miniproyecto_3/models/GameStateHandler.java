@@ -16,16 +16,19 @@ public class GameStateHandler {
         private int playerSunkenBoats;
         private boolean playerTurn;
         private boolean gameInProgress;
+        private String playerNickName;
 
 
         public GameState(ArrayList<ArrayList<Integer>> playerTable,
                          ArrayList<ArrayList<Integer>> machineTable,
+                         String playerNickName,
                          int machineSunkenBoats,
                          int playerSunkenBoats,
                          boolean playerTurn,
                          boolean gameInProgress) {
             this.playerTable = playerTable;
             this.machineTable = machineTable;
+            this.playerNickName = playerNickName;
             this.machineSunkenBoats = machineSunkenBoats;
             this.playerSunkenBoats = playerSunkenBoats;
             this.playerTurn = playerTurn;
@@ -39,6 +42,7 @@ public class GameStateHandler {
         public int getPlayerSunkenBoats() { return playerSunkenBoats; }
         public boolean isPlayerTurn() { return playerTurn; }
         public boolean isGameInProgress() { return gameInProgress; }
+        public String getPlayerNickName() { return playerNickName; }
     }
 
     public static void saveGameState(GameState state) {
@@ -56,6 +60,7 @@ public class GameStateHandler {
             try (PrintWriter writer = new PrintWriter(new FileWriter("saves/" + GAME_INFO_FILE))) {
                 writer.println("Estado del juego:");
                 writer.println("----------------");
+                writer.println("Nickname: " + state.getPlayerNickName());
                 writer.println("Barcos hundidos del jugador: " + state.getPlayerSunkenBoats());
                 writer.println("Barcos hundidos de la máquina: " + state.getMachineSunkenBoats());
                 writer.println("Turno del jugador: " + (state.isPlayerTurn() ? "Sí" : "No"));

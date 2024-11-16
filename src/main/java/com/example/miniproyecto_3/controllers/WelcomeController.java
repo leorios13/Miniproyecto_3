@@ -7,13 +7,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
+
 import java.io.IOException;
 import java.util.Optional;
 
 public class WelcomeController {
 
     @FXML
+    private TextField nicknameTextField;
+
+    @FXML
     void onHandlePlayButton(ActionEvent event) throws IOException {
+
+        String nickName = nicknameTextField.getText();
+
         if (GameStateHandler.savedGameExists()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Juego guardado encontrado");
@@ -30,14 +38,16 @@ public class WelcomeController {
                 GameView.getInstance().getGameController().loadGame();
             } else {
                 GameStateHandler.clearSavedGame();
-                GameView.getInstance().getGameController().initializeBoard();
+                GameView.getInstance().getGameController().initializeBoard(nickName);
             }
         } else {
-            GameView.getInstance().getGameController().initializeBoard();
+
+            GameView.getInstance().getGameController().initializeBoard(nickName);
         }
     }
 
     public void onHandleInstructionsButton(ActionEvent actionEvent) {
         new AlertBox().showAlert("INFORMATION", "INSTRUCCIONES DEL JUEGO", "   ", Alert.AlertType.INFORMATION);
     }
+
 }

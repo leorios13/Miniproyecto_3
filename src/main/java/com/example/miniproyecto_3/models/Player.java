@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class Player {
     private ArrayList<ArrayList<Integer>> playerTable;
+    private final String playerNickName;
 
-    public Player() {
+    public Player(String nickName) {
+        playerNickName = nickName;
         playerTable = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             playerTable.add(new ArrayList<>());
@@ -106,5 +108,9 @@ public class Player {
             }
         }
         return false;
+    }
+
+    public String getPlayerNickName() {
+        return playerNickName;
     }
 }

@@ -49,8 +49,8 @@ public class GameController {
     Image sunkedImage = new Image(getClass().getResourceAsStream("/com/example/miniproyecto_3/images/crucero.png"));
     ImagePattern sunkedPattern = new ImagePattern(sunkedImage);
 
-    public void initializeBoard() {
-        player = new Player();
+    public void initializeBoard(String nickName) {
+        player = new Player(nickName);
         machine = new Machine();
         placedPlayerBoats = 0;
         playerTurn = false;
@@ -272,7 +272,7 @@ public class GameController {
                                     playerBoard.getChildren().clear();
                                     machineBoard.getChildren().clear();
                                     shipPort.getChildren().clear();
-                                    initializeBoard();
+                                    initializeBoard(player.getPlayerNickName());
                                     showButton.setDisable(false);
                                     GameStateHandler.clearSavedGame(); // Limpiar el juego guardado al terminar
                                 }
@@ -314,7 +314,7 @@ public class GameController {
                     playerBoard.getChildren().clear();
                     machineBoard.getChildren().clear();
                     shipPort.getChildren().clear();
-                    initializeBoard();
+                    initializeBoard(player.getPlayerNickName());
                     showButton.setDisable(false);
                     GameStateHandler.clearSavedGame(); // Limpiar el juego guardado al terminar
                     return;
@@ -339,6 +339,7 @@ public class GameController {
             GameStateHandler.GameState state = new GameStateHandler.GameState(
                     player.getPlayerTable(),
                     machine.getmachineTable(),
+                    player.getPlayerNickName(),
                     machineSunkenBoats,
                     playerSunkenBoats,
                     playerTurn,
@@ -367,7 +368,7 @@ public class GameController {
                 createBoard(machineBoard);
 
                 // Restaurar el estado del juego
-                this.player = new Player();
+                this.player = new Player(savedState.getPlayerNickName());
                 this.machine = new Machine();
                 this.placedPlayerBoats = 10; // Todos los barcos ya están colocados
 
@@ -385,7 +386,6 @@ public class GameController {
                 this.playerTurn = savedState.isPlayerTurn();
 
                 // Configurar la interfaz para juego en progreso
-                shipPort.setVisible(false);
                 showButton.setDisable(true);
 
                 // Actualizar la visualización de los tableros incluyendo los disparos al agua
@@ -432,52 +432,9 @@ public class GameController {
                         playerCell.setStroke(Color.BLACK);
                     }
 
-                    // Agregar eventos solo a celdas no disparadas en el tablero de la máquina
-                    if (machineCellValue >= 0 && machineCellValue != 5) {
-                        final int finalRow = row;
-                        final int finalCol = col;
-
-                        machineCell.setOnMousePressed(event -> {
-                            if (playerTurn && event.getButton().equals(MouseButton.PRIMARY)) {
-                                int boatSize = machine.getValue(finalRow, finalCol);
-                                String shotResult = machine.checkShot(finalRow, finalCol);
-                                machineCell.setOnMousePressed(null);
-
-                                if (shotResult.equals("Tocado")) {
-                                    machineCell.setFill(bombaPattern);
-                                    machineCell.setStroke(Color.BLACK);
-
-                                    if (machine.checkBoatSunken(finalRow, finalCol, boatSize)) {
-                                        machineSunkenBoats++;
-                                        updateBoardWithModel(machineBoard, machine.getmachineTable());
-
-                                        if (machineSunkenBoats == 10) {
-                                            new AlertBox().showAlert("INFORMATION", "¡El juego ha terminado!",
-                                                    "GANASTE :)", Alert.AlertType.INFORMATION);
-                                            playerBoard.getChildren().clear();
-                                            machineBoard.getChildren().clear();
-                                            shipPort.getChildren().clear();
-                                            initializeBoard();
-                                            showButton.setDisable(false);
-                                            GameStateHandler.clearSavedGame();
-                                            return;
-                                        }
-                                    }
-                                    saveGame();
-                                } else {
-                                    machineCell.setFill(xPattern);
-                                    machineCell.setStroke(Color.BLACK);
-                                    saveGame();
-                                    machineTurn();
-                                }
-                            }
-                        });
-                    }
                 }
 
-                // Colocar los tableros en la posición correcta
-                playerBoard.toBack();
-                machineBoard.toFront();
+                addMouseEventsToMachineBoard();
 
                 // Mostrar alerta de que el juego se ha cargado
                 new AlertBox().showAlert("INFORMATION", "Partida Cargada",
@@ -494,11 +451,11 @@ public class GameController {
             } catch (Exception e) {
                 System.err.println("Error durante la carga del juego: " + e.getMessage());
                 e.printStackTrace();
-                initializeBoard();
+                initializeBoard(player.getPlayerNickName());
             }
         } else {
             System.err.println("No se pudo cargar el juego guardado");
-            initializeBoard();
+            initializeBoard(player.getPlayerNickName());
         }
     }
 
