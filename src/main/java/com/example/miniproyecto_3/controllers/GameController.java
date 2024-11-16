@@ -464,6 +464,7 @@ public class GameController {
 
                     // Actualizar celda del tablero de la máquina
                     int machineCellValue = machine.getValue(row, col);
+                    machineCell.setOnMousePressed(null);
                     if (machineCellValue == 5) {
                         machineCell.setFill(xPattern);
                         machineCell.setStroke(Color.BLACK);
