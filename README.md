@@ -20,6 +20,9 @@ POSICIONAMIENTO DE BARCOS Y VISUALIZACIÓN TABLERO OPONENTE, AVISO INICIO DE JUE
 JUEGO EN CURSO CON TIROS AL AGUA, TOCADO Y BARCOS HUNDIDOS
 <img width="1205" alt="Captura de pantalla 2024-11-18 a la(s) 9 58 06 a m" src="https://github.com/user-attachments/assets/9ac9d8d8-12c5-41d4-a947-e84c5e10fa57">
 
+CERRAMOS Y CARGAMOS PARTIDA GUARGADA
+<img width="1205" alt="Captura de pantalla 2024-11-18 a la(s) 10 07 33 a m" src="https://github.com/user-attachments/assets/7d4dacff-2ee5-4425-b870-6dfeea278d69">
+
 GANADOR DEL JUEGO 
 <img width="1205" alt="Captura de pantalla 2024-11-18 a la(s) 9 58 39 a m" src="https://github.com/user-attachments/assets/9aafe393-19a7-4a9b-a8da-1bc44f095407">
 
